@@ -1,0 +1,19 @@
+MAHSULOTLAR:
+
+1. Mahsulot: Erkaklar futbolkasi
+Narxi: 120 000 so'm
+Ranglar: qora, oq, ko'k
+O'lchamlar: M, L, XL
+Holati: mavjud
+
+2. Mahsulot: Erkaklar shim
+Narxi: 220 000 so'm
+Ranglar: qora, kulrang
+O'lchamlar: 30, 32, 34, 36
+Holati: mavjud
+
+3. Mahsulot: Krossovka
+Narxi: 350 000 so'm
+Ranglar: qora, oq
+O'lchamlar: 40, 41, 42, 43
+Holati: mavjud
