@@ -104,6 +104,13 @@ async def message_handler(
 
 
 def main():
+    def main():
+    port = int(os.environ.get("PORT", "10000"))
+    render_url = os.environ.get("RENDER_EXTERNAL_URL")
+
+    if not render_url:
+        raise RuntimeError("RENDER_EXTERNAL_URL topilmadi")
+
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(
@@ -117,9 +124,14 @@ def main():
         )
     )
 
-    print("AI Sotuvchi Groq bilan ishga tushdi.")
+    print("AI Sotuvchi Render webhook bilan ishga tushdi.")
 
-    app.run_polling()
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=port,
+        url_path=BOT_TOKEN,
+        webhook_url=f"{render_url}/{BOT_TOKEN}",
+    )
 
 
 if __name__ == "__main__":
