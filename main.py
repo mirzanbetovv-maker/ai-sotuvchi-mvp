@@ -3,7 +3,7 @@ import asyncio
 import logging
 
 from dotenv import load_dotenv
-from groq import Groq
+from google import genai
 from telegram import Update
 from telegram.ext import (
     Application,
@@ -16,15 +16,15 @@ from telegram.ext import (
 load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not BOT_TOKEN:
     raise RuntimeError("TELEGRAM_BOT_TOKEN topilmadi")
 
-if not GROQ_API_KEY:
-    raise RuntimeError("GROQ_API_KEY topilmadi")
+if not GEMINI_API_KEY:
+    raise RuntimeError("GEMINI_API_KEY topilmadi")
 
-client = Groq(api_key=GROQ_API_KEY)
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,15 +36,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-def ask_groq(text):
+def ask_gemini(text):
     try:
-        with open(r"D:\ai_sotuvchi_mvp\products.txt", "r", encoding="utf-8") as file:
+        with open("products.txt", "r", encoding="utf-8") as file:
             products = file.read()
     except FileNotFoundError:
         products = "Mahsulotlar ro'yxati topilmadi."
 
-    system_prompt = f"""
+    prompt = f"""
 Sen professional AI sotuvchisan.
+
 Mijoz bilan o'zbek tilida sodda, qisqa va muloyim gaplash.
 
 DO'KONDAGI MAHSULOTLAR:
@@ -52,32 +53,27 @@ DO'KONDAGI MAHSULOTLAR:
 {products}
 
 QOIDALAR:
-- Narxlarni faqat yuqoridagi mahsulotlar ro'yxatidan ol.
-- Narxni o'zing o'ylab topma.
+
+- Narxlarni faqat mahsulotlar ro'yxatidan ol.
+- Narxlarni o'zing o'ylab topma.
 - Mavjud bo'lmagan mahsulotni mavjud deb aytma.
 - Mijozga mos mahsulot tavsiya qil.
-- Mijoz sotib olmoqchi bo'lsa, mahsulot nomini aniqlashtir.
-- Kerak bo'lsa rang va o'lchamini so'ra.
-- Ro'yxatda ma'lumot bo'lmasa, ma'lumot yo'qligini ayt.
+- Mijoz sotib olmoqchi bo'lsa, mahsulot nomi,
+  rangi va o'lchamini aniqlashtir.
+- Agar kerakli ma'lumot ro'yxatda bo'lmasa,
+  bu ma'lumot mavjud emasligini ayt.
+
+MIJOZNING XABARI:
+
+{text}
 """
 
-    completion = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
-        messages=[
-            {
-                "role": "system",
-                "content": system_prompt,
-            },
-            {
-                "role": "user",
-                "content": text,
-            },
-        ],
-        temperature=0.4,
-        max_tokens=500,
+    response = client.models.generate_content(
+        model="gemini-3.8-flash",
+        contents=prompt,
     )
 
-    return completion.choices[0].message.content
+    return response.text
 
 
 async def message_handler(
@@ -86,7 +82,7 @@ async def message_handler(
 ):
     try:
         answer = await asyncio.to_thread(
-            ask_groq,
+            ask_gemini,
             update.message.text
         )
 
@@ -95,30 +91,28 @@ async def message_handler(
         )
 
     except Exception:
-        logging.exception("Groq xatosi")
-
+        logging.exception("Gemini xatosi")
         await update.message.reply_text(
-            "AI serverida vaqtinchalik muammo. "
-            "Birozdan keyin qayta urinib ko'ring."
+            "Texnik muammo yuz berdi."
         )
 
 
 def main():
-   def main():
-       port = int(os.environ.get("PORT", "10000"))
-       render_url = os.environ.get("RENDER_EXTERNAL_URL")
+    def main():
+    port = int(os.environ.get("PORT", "10000"))
+    render_url = os.environ.get("RENDER_EXTERNAL_URL")
 
-       if not render_url:
-           raise RuntimeError("RENDER_EXTERNAL_URL topilmadi")
+    if not render_url:
+        raise RuntimeError("RENDER_EXTERNAL_URL topilmadi")
 
-       app = Application.builder().token(BOT_TOKEN).build()
+    app = Application.builder().token(BOT_TOKEN).build()
 
-       app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("start", start))
 
-       app.add_handler(
-           MessageHandler(
-               filters.TEXT & ~filters.COMMAND,
-               message_handler
+    app.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            message_handler
         )
     )
 
