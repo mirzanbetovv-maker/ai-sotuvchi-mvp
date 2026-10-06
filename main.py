@@ -104,23 +104,21 @@ async def message_handler(
 
 
 def main():
-    def main():
-    port = int(os.environ.get("PORT", "10000"))
-    render_url = os.environ.get("RENDER_EXTERNAL_URL")
+   def main():
+       port = int(os.environ.get("PORT", "10000"))
+       render_url = os.environ.get("RENDER_EXTERNAL_URL")
 
-    if not render_url:
-        raise RuntimeError("RENDER_EXTERNAL_URL topilmadi")
+       if not render_url:
+           raise RuntimeError("RENDER_EXTERNAL_URL topilmadi")
 
-    app = Application.builder().token(BOT_TOKEN).build()
+       app = Application.builder().token(BOT_TOKEN).build()
 
-    app.add_handler(
-        CommandHandler("start", start)
-    )
+       app.add_handler(CommandHandler("start", start))
 
-    app.add_handler(
-        MessageHandler(
-            filters.TEXT & ~filters.COMMAND,
-            message_handler
+       app.add_handler(
+           MessageHandler(
+               filters.TEXT & ~filters.COMMAND,
+               message_handler
         )
     )
 
