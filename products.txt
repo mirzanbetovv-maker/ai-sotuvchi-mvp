@@ -1,19 +1,28 @@
-MAHSULOTLAR:
-
-1. Mahsulot: Erkaklar futbolkasi
-Narxi: 120 000 so'm
-Ranglar: qora, oq, ko'k
-O'lchamlar: M, L, XL
+1. Mahsulot: Samsung Galaxy A55
+Narxi: 4 800 000 so'm
+Xotira: 256 GB
+RAM: 8 GB
+Ranglar: qora, ko'k
+Kamera: 50 MP
+Batareya: 5000 mAh
 Holati: mavjud
+Rasm: samsung_a55.jpg
 
-2. Mahsulot: Erkaklar shim
-Narxi: 220 000 so'm
-Ranglar: qora, kulrang
-O'lchamlar: 30, 32, 34, 36
+2. Mahsulot: iPhone 15
+Narxi: 10 500 000 so'm
+Xotira: 128 GB
+RAM: 6 GB
+Ranglar: qora, ko'k, pushti
+Kamera: 48 MP
 Holati: mavjud
+Rasm: iphone15.jpg
 
-3. Mahsulot: Krossovka
-Narxi: 350 000 so'm
-Ranglar: qora, oq
-O'lchamlar: 40, 41, 42, 43
+3. Mahsulot: Redmi Note 13 Pro
+Narxi: 3 900 000 so'm
+Xotira: 256 GB
+RAM: 8 GB
+Ranglar: qora, binafsha
+Kamera: 200 MP
+Batareya: 5100 mAh
 Holati: mavjud
+Rasm: redmi_note13pro.jpg
